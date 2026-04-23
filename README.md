@@ -39,7 +39,7 @@ These commands ensure that Elasticsearch (used by SonarQube) has sufficient virt
 
 1. **Clone the repository**:
    ```bash
-   git clone <repository-url>
+   git clone https://github.com/Jayesh2026/sonarqube-integration-docs.git
    cd SonarQube
    ```
 

@@ -1,10 +1,10 @@
-version: "3"
 name: bnt-cnx-sonarqube-service
 
 services:
-  sonarqube:
-    image: sonarqube:latest   # sonarqube:2025.1-community
+  sonarqube-server:
+    image: sonarqube:community
     container_name: sonarqube-server
+    restart: unless-stopped
     depends_on:
       - sonarqube_db
     environment:
@@ -13,6 +13,8 @@ services:
       SONAR_JDBC_PASSWORD: sonar
     ports:
       - "9001:9000"
+    networks:
+      - bnt-network
     volumes:
       - sonarqube_conf:/opt/sonarqube/conf
       - sonarqube_data:/opt/sonarqube/data
@@ -23,17 +25,32 @@ services:
   sonarqube_db:
     image: postgres:15
     container_name: sonarqube-db
+    restart: unless-stopped
     environment:
       POSTGRES_USER: sonar
       POSTGRES_PASSWORD: sonar
       POSTGRES_DB: sonar
+    ports:
+      - "3307:5432"
+    networks:
+      - bnt-network
     volumes:
       - sonarqube_db_data:/var/lib/postgresql/data
 
+networks:
+  bnt-network:
+    external: true
+
 volumes:
   sonarqube_conf:
+    name: sonarqube_conf
   sonarqube_data:
+    name: sonarqube_data
   sonarqube_extensions:
+    name: sonarqube_extensions
   sonarqube_logs:
+    name: sonarqube_logs
   sonarqube_temp:
+    name: sonarqube_temp
   sonarqube_db_data:
+    name: sonarqube_db_data
